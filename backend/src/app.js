@@ -6,7 +6,7 @@ const { notesRouter } = require('./routes/notes');
 function createApp() {
   const app = express();
 
-  const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+  const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000,https://private-notes-frontendd.onrender.com')
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
