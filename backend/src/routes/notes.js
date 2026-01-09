@@ -78,6 +78,39 @@ router.post('/', requireAuth, async (req, res) => {
   }
 });
 
+// Update note
+router.put('/:id', requireAuth, async (req, res) => {
+  try {
+    const { title, content } = req.body || {};
+
+    if (!isNonEmptyString(title) || !isNonEmptyString(content)) {
+      return res
+        .status(400)
+        .json({ error: 'Both title and content are required' });
+    }
+
+    const supabase = createSupabaseClientForRequest(req);
+
+    const { data, error } = await supabase
+      .from('notes')
+      .update({
+        title: title.trim(),
+        content: content.trim(),
+      })
+      .eq('id', req.params.id)
+      .eq('user_id', req.user.id)
+      .select('id,user_id,title,content,created_at')
+      .maybeSingle();
+
+    if (error) return res.status(500).json({ error: error.message });
+    if (!data) return res.status(404).json({ error: 'Note not found' });
+
+    return res.json({ note: data });
+  } catch (err) {
+    return res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // Delete note
 router.delete('/:id', requireAuth, async (req, res) => {
   try {

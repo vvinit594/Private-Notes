@@ -20,3 +20,10 @@ create policy "notes_delete_own"
 on public.notes
 for delete
 using (auth.uid() = user_id);
+
+-- Update: users can only update their own notes
+create policy "notes_update_own"
+on public.notes
+for update
+using (auth.uid() = user_id)
+with check (auth.uid() = user_id);

@@ -56,6 +56,18 @@ export async function createNote(
   return (data as { note: Omit<Note, "user_id"> }).note;
 }
 
+export async function updateNote(
+  accessToken: string,
+  id: string,
+  input: { title: string; content: string },
+): Promise<Note> {
+  const data = await apiFetch(`/notes/${id}`, accessToken, {
+    method: "PUT",
+    body: JSON.stringify(input),
+  });
+  return (data as { note: Note }).note;
+}
+
 export async function deleteNote(accessToken: string, id: string): Promise<void> {
   await apiFetch(`/notes/${id}`, accessToken, { method: "DELETE" });
 }
