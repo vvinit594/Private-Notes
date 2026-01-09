@@ -19,6 +19,10 @@ function createApp() {
   );
   app.use(express.json({ limit: '1mb' }));
 
+  app.get('/', (req, res) => {
+    res.status(200).json({ message: 'Backend is running' });
+  });
+
   app.get('/health', (req, res) => {
     res.json({ ok: true });
   });
